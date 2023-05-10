@@ -20,6 +20,12 @@ import org.springframework.util.DigestUtils;
 @Slf4j
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
+    /**
+     * 描述:处理登录的业务逻辑
+     * 自己做的:编写的逻辑与老师基本一致,只不过把业务逻辑从controller移到了service中
+     * @param employee
+     * @return
+     */
     @Override
     public R login(Employee employee) {
         EmployeeMapper mapper = getBaseMapper();
@@ -28,14 +34,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         queryWrapper.eq("username",employee.getUsername());
         Employee emp = mapper.selectOne(queryWrapper);
         //当前用户名未注册
-        if(emp.getUsername() == null){
-            return R.error("用户不存在");
+        if(emp == null){
+            return R.error("登录失败");
         }
         String pwdFromRequest = DigestUtils.md5DigestAsHex(employee.getPassword().getBytes());
         String pwdFromDb = emp.getPassword();
         //密码错误
         if(!pwdFromRequest.equals(pwdFromDb)){
-            return R.error("密码错误");
+            return R.error("登录失败");
         }
         //当前用户已被禁用
         if(emp.getStatus() == 0){

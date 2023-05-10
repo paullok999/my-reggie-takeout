@@ -42,7 +42,7 @@
       Promise.reject(error)
   })
 
-  // 响应拦截器
+  // 响应拦截器(开发LoginFilter时需结合这段代码来开发)
   service.interceptors.response.use(res => {
       console.log('---响应拦截器---',res)
       // 未设置状态码则默认成功状态
